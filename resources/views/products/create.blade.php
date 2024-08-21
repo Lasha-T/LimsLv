@@ -1,17 +1,32 @@
 <x-app-layout>
     <!-- Page Heading -->
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            {{ __('Add Product') }}
-        </h2>
+        <div class="flex">
+            <h2 class="pr-7 font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
+                {{ __('Add') }}
+            </h2>
+            <h2 class="pr-7 font-semibold text-xl  text-gray-400 dark:text-gray-500 hover:text-gray-500 dark:hover:text-gray-400 focus:text-gray-500 dark:focus:text-gray-400 leading-tight">
+                <a href="{{ route('products.index') }}">
+                    {{ __('View') }} 
+                </a>
+            </h2>
+        </div>
     </x-slot>
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-           
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 bg-white dark:bg-gray-800">              
-                    <form method="POST" action="{{ route('products.store') }}" enctype="multipart/form-data">
+                <div class="p-6 bg-white dark:bg-gray-800">
+
+                    <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
+                        {{ __('Add Product') }}
+                    </h2>
+            
+                    <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
+                        {{ __('Create a new product and add it to the database.') }}
+                    </p>         
+
+                    <form method="POST" action="{{ route('products.store') }}" enctype="multipart/form-data" class="mt-6 space-y-6">
                         @csrf
 
                         <!-- Name Field -->
@@ -54,7 +69,5 @@
                 </div>
             </div>
         </div>
-    </div>
-
-    
+    </div>      
 </x-app-layout>

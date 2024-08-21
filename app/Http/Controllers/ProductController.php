@@ -9,15 +9,21 @@ use Illuminate\Support\Facades\Storage;
 
 class ProductController extends Controller
 {
-    public function index()
+    public function menu()
     {
-        return view('products.index');
+        return view('products.menu');
     }
        
     public function create()
     {
         return view('products.create');
     }
+
+    public function index()
+    {
+        $products = Product::paginate(10);
+        return view('products.index', compact('products'));
+    }        
     
     public function store(Request $request)
     {
@@ -46,6 +52,6 @@ class ProductController extends Controller
             'image_path' => $imagePath,
         ]);
 
-        return redirect()->route('products.index')->with('success', 'Product added successfully!');
+        return redirect()->route('products.menu')->with('success', 'Product added successfully!');
     }
 }
