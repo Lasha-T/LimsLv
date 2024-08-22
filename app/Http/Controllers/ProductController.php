@@ -19,9 +19,66 @@ class ProductController extends Controller
         return view('products.create');
     }
 
+    public function edit($id)
+    {
+        $product = Product::findOrFail($id); // Retrieves the product by ID or throws a 404 error if not found.
+        return view('products.edit', compact('product')); // Pass the product data to the edit view.
+    }
+
+    public function update(Request $request, $id)
+    {
+        // Find the product by ID
+        $product = Product::findOrFail($id);
+    
+        // Validate the incoming request data
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'description' => 'nullable|string|max:1000',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048', // Max size: 2MB
+            'price' => 'required|numeric|min:0',
+            'stock' => 'required|integer|min:0',
+        ]);
+    
+        // Handle the image upload if a new image is uploaded
+        if ($request->hasFile('image')) {
+            // Delete the old image if it exists
+            if ($product->image_path) {
+                $oldImagePath = public_path('storage/' . $product->image_path);
+                if (file_exists($oldImagePath)) {
+                    unlink($oldImagePath);
+                }
+            }
+    
+            // Store the new image
+            $image = $request->file('image');
+            $imageName = time() . '.' . $image->getClientOriginalExtension();
+            $image->storeAs('uploads', $imageName, 'public');
+            $imagePath = 'uploads/' . $imageName;
+    
+            // Update the product image path
+            $product->image_path = $imagePath;
+        }
+    
+        // Update the product details with the validated data
+        $product->name = $request->input('name');
+        $product->description = $request->input('description');
+        $product->price = $request->input('price');
+        $product->stock = $request->input('stock');
+    
+        // Save the updated product to the database
+        $product->save();
+    
+        // Redirect back to the products index page with a success message
+        return redirect()->route('products.index')->with('success', 'Product updated successfully.');
+    }
+    
+    
+    
+    
+
     public function index()
     {
-        $products = Product::paginate(10);
+        $products = Product::paginate(5);
         return view('products.index', compact('products'));
     }        
     

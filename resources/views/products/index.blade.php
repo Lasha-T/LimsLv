@@ -9,12 +9,14 @@
             </h2>
             <h2 class="pr-7 font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
                 {{ __('View') }}
-            </h2>
+            </h2>        
         </div>
     </x-slot>
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            <!-- Success Message -->
+            @include('products.partials.success-message') 
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 bg-white dark:bg-gray-800">
 
@@ -44,12 +46,15 @@
                                 <th scope="col" class="px-6 py-3 text-left text-sm font-bold text-blue-600 dark:text-blue-400 uppercase tracking-wider">
                                     Image
                                 </th>
+                                <th scope="col" class="px-6 py-3 text-left text-sm font-bold text-blue-600 dark:text-blue-400 uppercase tracking-wider">
+                                    Action
+                                </th>
                             </tr>
                         </thead>
                         
                         <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
                             @foreach ($products as $product)
-                                <tr>
+                                <tr>                                  
                                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-gray-100">
                                         {{ $product->name }}
                                     </td>
@@ -69,6 +74,11 @@
                                             {{ __('No Image') }}
                                         @endif
                                     </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">
+                                        <a href="{{ route('products.edit', ['product' => $product->id]) }}" class="text-blue-600 hover:underline">
+                                            Edit
+                                        </a>
+                                    </td>
                                 </tr>
                             @endforeach
                         </tbody>
@@ -81,4 +91,5 @@
             </div>
         </div>
     </div>  
+    <script src="{{ asset('js/ac.js') }}"></script>      
 </x-app-layout>
