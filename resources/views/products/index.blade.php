@@ -25,7 +25,7 @@
                     </h2>
 
                     <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
-                        {{ __('Full list of products saved in system.') }}
+                        {{ __('Full list of products saved in the database.') }}
                     </p>                     
 
                     <table class="mt-6 space-y-6 min-w-full divide-y divide-gray-200 dark:divide-gray-700">
@@ -45,6 +45,9 @@
                                 </th>
                                 <th scope="col" class="px-6 py-3 text-left text-sm font-bold text-blue-600 dark:text-blue-400 uppercase tracking-wider">
                                     Image
+                                </th>
+                                <th scope="col" class="px-6 py-3 text-left text-sm font-bold text-blue-600 dark:text-blue-400 uppercase tracking-wider">
+                                    Action
                                 </th>
                                 <th scope="col" class="px-6 py-3 text-left text-sm font-bold text-blue-600 dark:text-blue-400 uppercase tracking-wider">
                                     Action
@@ -75,9 +78,18 @@
                                         @endif
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">
-                                        <a href="{{ route('products.edit', ['product' => $product->id]) }}" class="text-blue-600 hover:underline">
+                                        <a href="{{ route('products.edit', ['product' => $product->id]) }}" class="text-gray-500 dark:text-gray-400 border border-gray-500 dark:border-gray-400 rounded-full px-3 py-1 hover:bg-blue-600 hover:text-white hover:border-blue-600 transition duration-200">
                                             Edit
                                         </a>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">
+                                        <form action="{{ route('products.destroy', ['product' => $product->id]) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this product?');" >
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="text-gray-500 dark:text-gray-400 border border-gray-500 dark:border-gray-400 rounded-full px-3 py-1 hover:bg-red-600 hover:text-white hover:border-red-600 transition duration-200">
+                                                Delete
+                                            </button>
+                                        </form>
                                     </td>
                                 </tr>
                             @endforeach
@@ -91,5 +103,5 @@
             </div>
         </div>
     </div>  
-    <script src="{{ asset('js/ac.js') }}"></script>      
+    <script src="{{ asset('js/ac.js') }}"></script>  
 </x-app-layout>
