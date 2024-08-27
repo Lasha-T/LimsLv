@@ -15,7 +15,7 @@ Route::prefix('shop')->group(function () {
     Route::get('/products', [ShopController::class, 'products'])->name('shop.products');
     Route::get('/cart', [ShopController::class, 'cart'])->name('shop.cart');
 });
-
+Route::get('/product/{id}', [ShopController::class, 'showProduct'])->name('shop.showProduct');
 
 Route::get('/dashboard', function () {
     return view('dashboard');

@@ -18,6 +18,12 @@ class ShopController extends Controller
         return view('shop.products', compact('products'));
     }
 
+    public function showProduct($id)
+    {
+        $product = Product::findOrFail($id);
+        return view('shop.showProduct', compact('product'));
+    }
+
     public function cart()
     {
         $cartItems = [
