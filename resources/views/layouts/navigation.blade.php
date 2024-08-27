@@ -14,13 +14,20 @@
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                     <!-- Dashboard Link -->
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                        {{ __('Dashboard') }}
+                        {{ __('Dashboard') }} 
                     </x-nav-link>
                     <!-- Products Link -->
                     <x-nav-link :href="route('products.menu')" :active="request()->routeIs('products.*')">
                         {{ __('Products') }}
                     </x-nav-link>
                 </div>
+            </div>
+
+            <!-- Shop Home Link -->
+            <div class="hidden sm:flex ml-auto">
+                <x-nav-link :href="route('shop.home')">
+                    {{ __('Shop') }}
+                </x-nav-link>
             </div>
 
             <!-- Settings Dropdown -->

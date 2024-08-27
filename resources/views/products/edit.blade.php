@@ -52,9 +52,9 @@
                             <label for="image" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Product Image</label>
                             <div class="mb-4">
                                 @if($product->image_path)
-                                    <img id="imagePreview" src="{{ asset('storage/' . $product->image_path) }}" alt="Product Image" class="w-32 h-32 object-cover">
+                                    <img id="imagePreview" src="{{ asset('storage/' . $product->image_path) }}" alt="Product Image" class="w-32 h-32 object-cover rounded-md">
                                 @else
-                                    <img id="imagePreview" src="" alt="Product Image" class="w-32 h-32 object-cover hidden">
+                                    <img id="imagePreview" src="" alt="Product Image" class="w-32 h-32 object-cover rounded-md hidden">
                                 @endif
                             </div>
                             <input type="file" name="image" id="image" accept="image/*" class="mt-1 block w-full text-gray-900 dark:text-gray-300 rounded-md border-gray-300 dark:border-gray-700 dark:bg-gray-900 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">

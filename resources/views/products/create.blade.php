@@ -44,6 +44,7 @@
                         <!-- Image Upload -->
                         <div class="mb-4">
                             <label for="image" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Product Image</label>                         
+                            <img id="imagePreview" src="#" alt="Image Preview" class="mb-2 hidden w-32 h-32 object-cover rounded-md">
                             <input type="file" name="image" id="image" accept="image/*" class="mt-1 block w-full text-gray-900 dark:text-gray-300 rounded-md border-gray-300 dark:border-gray-700 dark:bg-gray-900 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50" >
                         </div>    
 
@@ -69,5 +70,20 @@
                 </div>
             </div>
         </div>
-    </div>      
+    </div>
+    <!-- Script to handle image preview -->
+    <script>
+        document.getElementById('image').addEventListener('change', function(event) {
+            const [file] = event.target.files;
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const imagePreview = document.getElementById('imagePreview');
+                    imagePreview.src = e.target.result;
+                    imagePreview.classList.remove('hidden');
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+    </script>      
 </x-app-layout>

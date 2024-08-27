@@ -1,12 +1,21 @@
 <?php
 
-use App\Http\Controllers\ProfileController;
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ShopController;
+use Illuminate\Support\Facades\Route;
+
 
 Route::get('/', function () {
-    return view('welcome');
+    return redirect('/shop');
 });
+
+Route::prefix('shop')->group(function () {
+    Route::get('/', [ShopController::class, 'home'])->name('shop.home');
+    Route::get('/products', [ShopController::class, 'products'])->name('shop.products');
+    Route::get('/cart', [ShopController::class, 'cart'])->name('shop.cart');
+});
+
 
 Route::get('/dashboard', function () {
     return view('dashboard');
