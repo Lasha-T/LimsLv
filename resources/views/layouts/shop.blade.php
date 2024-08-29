@@ -6,7 +6,7 @@
     <title>@yield('title', 'Web Shop')</title>
     @vite('resources/css/app.css')
 </head>
-<body class="bg-white text-gray-800 flex flex-col min-h-screen">
+<body class="bg-white text-gray-800 flex flex-col min-h-screen" style="user-select: none;">
     <header class="bg-green-600 text-white p-4">
     <nav class="container mx-auto flex justify-between items-center">
         <div class="flex-1 flex justify-center space-x-6">
@@ -46,7 +46,7 @@
 
 
     </header>
-    <main class="container flex-grow mx-auto px-24 py-12">
+    <main class="container flex-grow mx-auto py-12">
         @yield('content')
     </main>
     <footer class="bg-green-600 text-white p-4 text-center">
