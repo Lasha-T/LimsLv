@@ -23,13 +23,4 @@ class ShopController extends Controller
         $product = Product::findOrFail($id);
         return view('shop.showProduct', compact('product'));
     }
-
-    public function cart()
-    {
-        $cartItems = [
-            (object) ['name' => 'Product 1', 'price' => 10, 'quantity' => 1],
-            (object) ['name' => 'Product 2', 'price' => 20, 'quantity' => 2],
-        ];
-        return view('shop.cart', compact('cartItems'));
-    }
 }

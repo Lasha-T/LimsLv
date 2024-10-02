@@ -1,9 +1,11 @@
 <?php
 
+use App\Http\Controllers\CartController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ShopController;
 use Illuminate\Support\Facades\Route;
+
 
 
 Route::get('/', function () {
@@ -13,8 +15,8 @@ Route::get('/', function () {
 Route::prefix('shop')->group(function () {
     Route::get('/', [ShopController::class, 'home'])->name('shop.home');
     Route::get('/products', [ShopController::class, 'products'])->name('shop.products');
-    Route::get('/cart', [ShopController::class, 'cart'])->name('shop.cart');
 });
+
 Route::get('/product/{id}', [ShopController::class, 'showProduct'])->name('shop.showProduct');
 
 Route::get('/dashboard', function () {
@@ -34,6 +36,16 @@ Route::middleware('auth')->group(function () {
     Route::get('/products/{product}/edit', [ProductController::class, 'edit'])->name('products.edit');
     Route::put('/products/{product}', [ProductController::class, 'update'])->name('products.update');
     Route::delete('/products/{product}', [ProductController::class, 'destroy'])->name('products.destroy');
+
+    Route::prefix('shop')->group(function () {
+        Route::get('/cart', [CartController::class, 'viewCart'])->name('shop.cart'); 
+        Route::post('/cart/add/{productId}', [CartController::class, 'addToCart'])->name('shop.cart.add'); 
+        Route::post('/cart/remove/{productId}', [CartController::class, 'removeFromCart'])->name('shop.cart.remove');
+        Route::post('/checkout', [CartController::class, 'checkoutPage'])->name('cart.checkout'); 
+        Route::post('/checkout/payment/confirm', [CartController::class, 'confirmPayment'])->name('cart.confirmPayment');
+        Route::post('/checkout/payment/discard', [CartController::class, 'discardOrder'])->name('cart.discardOrder');
+    });
+
 });
 
 require __DIR__.'/auth.php';
