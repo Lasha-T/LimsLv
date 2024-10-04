@@ -46,11 +46,21 @@
 
 
     </header>
+
+    <div class="py-12">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            <!-- Success Message -->
+            @include('products.partials.success-message') 
+        </div>
+    </div>
+
     <main class="container flex-grow mx-auto py-12">
         @yield('content')
     </main>
     <footer class="bg-green-600 text-white p-4 text-center">
         <p>© 2024 LimsLv Web Shop</p>
     </footer>
+
+    <script src="{{ asset('js/ac.js') }}"></script> 
 </body>
 </html>
