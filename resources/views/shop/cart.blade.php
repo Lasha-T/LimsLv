@@ -12,7 +12,7 @@
             @foreach($cartItems as $item)
                 <li class="mb-2">
                     {{ $item->name }} - ${{ $item->price }} x {{ $item->pivot->quantity }}
-                    <form action="{{ route('shop.cart.add', $item->id) }}" method="POST" class="inline-block ml-4">
+                    <form action="{{ route('shop.cart.update', $item->id) }}" method="POST" class="inline-block ml-4">
                         @csrf
                         <input type="number" name="quantity" value="{{ $item->pivot->quantity }}" min="1" class="border p-1 w-16">
                         <button type="submit" class="bg-blue-500 text-white text-sm px-2 py-1 ml-3 rounded">Update</button>

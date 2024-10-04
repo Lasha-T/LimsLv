@@ -41,6 +41,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/cart', [CartController::class, 'viewCart'])->name('shop.cart'); 
         Route::post('/cart/add/{productId}', [CartController::class, 'addToCart'])->name('shop.cart.add'); 
         Route::post('/cart/remove/{productId}', [CartController::class, 'removeFromCart'])->name('shop.cart.remove');
+        Route::post('/cart/update/{id}', [CartController::class, 'updateCart'])->name('shop.cart.update');
         Route::post('/checkout', [CartController::class, 'checkoutPage'])->name('cart.checkout'); 
         Route::post('/checkout/payment/confirm', [CartController::class, 'confirmPayment'])->name('cart.confirmPayment');
         Route::post('/checkout/payment/discard', [CartController::class, 'discardOrder'])->name('cart.discardOrder');

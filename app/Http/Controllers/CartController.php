@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Order;
+use App\Models\OrderProduct;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -13,23 +14,40 @@ class CartController extends Controller
     public function addToCart(Request $request, $productId)
     {
         $product = Product::findOrFail($productId);
-
-        // Get the current order (cart) for the logged-in user
+    
+        // Check if requested quantity is available
+        if ($request->quantity > $product->stock) {
+            return redirect()->back()->with('error', 'Not enough stock available.');
+        }
+    
         $order = Order::firstOrCreate(
-            ['user_id' => Auth::id(), 'status' => 'pending'],
+            ['user_id' => Auth::id(), 'status' => 'pending'], // Create a new pending order if one doesn't exist
             ['total_amount' => 0]
         );
-
-        // Add or update product in the pivot table
-        $order->products()->syncWithoutDetaching([
-            $productId => ['quantity' => $request->quantity]
-        ]);
-
-        // Update total amount
-        $order->total_amount += $product->price * $request->quantity;
-        $order->save();
-
-        return redirect()->back()->with('success', 'Product added to cart!');
+    
+        // Add product to order with the specified quantity
+        $existingOrderProduct = OrderProduct::where('order_id', $order->id)
+                                            ->where('product_id', $productId)
+                                            ->first();
+    
+        if ($existingOrderProduct) {
+            // If product already in order, update the quantity
+            $existingOrderProduct->quantity += $request->quantity;
+            $existingOrderProduct->save();
+        } else {
+            // Otherwise, add new product to order
+            OrderProduct::create([
+                'order_id' => $order->id,
+                'product_id' => $productId,
+                'quantity' => $request->quantity,
+            ]);
+        }
+    
+        // Deduct stock from the product
+        $product->stock -= $request->quantity;
+        $product->save();
+    
+        return redirect()->route('shop.cart')->with('success', 'Product added to cart.');
     }
 
     // View cart (current pending order)
@@ -54,27 +72,64 @@ class CartController extends Controller
         $order = Order::where('user_id', Auth::id())
                       ->where('status', 'pending')
                       ->first();
-
+    
         if ($order) {
-            $order->products()->detach($productId);
-            $this->updateTotalAmount($order);
-
-            return redirect()->back()->with('success', 'Product removed from cart.');
+            $orderProduct = $order->products()->where('product_id', $productId)->first();
+            
+            if ($orderProduct) {
+                // Return the product's quantity back to stock
+                $product = Product::findOrFail($productId);
+                $product->stock += $orderProduct->pivot->quantity;
+                $product->save();
+    
+                // Remove the product from the order
+                $order->products()->detach($productId);
+            }
+    
+            return redirect()->route('shop.cart')->with('success', 'Product removed from cart and stock restored.');
         }
-
-        return redirect()->back()->with('error', 'Cart not found.');
+    
+        return redirect()->back()->with('error', 'No active order found.');
     }
+    
 
-    // Helper method to update the total amount
-    protected function updateTotalAmount($order)
+    public function updateCart(Request $request, $productId)
     {
-        $total = $order->products->sum(function ($product) {
-            return $product->price * $product->pivot->quantity;
-        });
-
-        $order->total_amount = $total;
-        $order->save();
+        $order = Order::where('user_id', Auth::id())
+                      ->where('status', 'pending')
+                      ->first();
+    
+        if ($order) {
+            $orderProduct = $order->products()->where('product_id', $productId)->first();
+            
+            if ($orderProduct) {
+                $oldQuantity = $orderProduct->pivot->quantity;
+                $newQuantity = $request->quantity;
+    
+                // Adjust the stock based on the quantity difference
+                $product = Product::findOrFail($productId);
+                if ($newQuantity > $oldQuantity) {
+                    $quantityDifference = $newQuantity - $oldQuantity;
+                    if ($quantityDifference > $product->stock) {
+                        return redirect()->back()->with('error', 'Not enough stock available.');
+                    }
+                    $product->stock -= $quantityDifference;
+                } else {
+                    $quantityDifference = $oldQuantity - $newQuantity;
+                    $product->stock += $quantityDifference;
+                }
+                $product->save();
+    
+                // Update the quantity in the pivot table
+                $order->products()->updateExistingPivot($productId, ['quantity' => $newQuantity]);
+            }
+    
+            return redirect()->route('shop.cart')->with('success', 'Cart updated successfully.');
+        }
+    
+        return redirect()->back()->with('error', 'No active order found.');
     }
+    
 
     public function checkout()
     {
@@ -94,39 +149,51 @@ class CartController extends Controller
     public function checkoutPage()
     {
         $order = Order::where('user_id', Auth::id())
-                    ->where('status', 'pending')
-                    ->first();
-
+                      ->where('status', 'pending')
+                      ->first();
+    
         if (!$order) {
             return redirect()->route('shop.cart')->with('error', 'No active cart found.');
         }
-
+    
         // Get the items in the order with their quantities
         $cartItems = $order->products;
-
-        return view('shop.checkout', compact('order', 'cartItems'));
+    
+        // Recalculate the total based on the current cart items
+        $totalAmount = $cartItems->sum(function ($product) {
+            return $product->price * $product->pivot->quantity;
+        });
+    
+        // Update the order with the recalculated total amount
+        $order->total_amount = $totalAmount;
+        $order->save(); // Save the recalculated total in the database
+    
+        return view('shop.checkout', compact('order', 'cartItems', 'totalAmount'));
     }
+    
+    
 
     // Confirm the payment
     public function confirmPayment(Request $request)
     {
         $order = Order::where('user_id', Auth::id())
-                        ->where('status', 'pending')
-                        ->first();
-
+                      ->where('status', 'pending')
+                      ->first();
+    
         if ($order) {
             // Mark the order as completed
             $order->status = 'completed';
             $order->save();
-
+    
             // Clear the cart (optional)
             session()->forget('cart');
-
+    
             return redirect()->route('shop.home')->with('success', 'Payment confirmed, order completed!');
         }
-
+    
         return redirect()->back()->with('error', 'No active order found.');
     }
+    
 
     // Discard the order and clear the cart
     public function discardOrder(Request $request)
@@ -134,19 +201,29 @@ class CartController extends Controller
         $order = Order::where('user_id', Auth::id())
                       ->where('status', 'pending')
                       ->first();
-
+    
         if ($order) {
+            // Loop through each product in the order
+            foreach ($order->products as $product) {
+                // Return the quantity of the product back to its stock
+                $product->stock += $product->pivot->quantity;
+                $product->save();
+            }
+    
             // Mark the order as canceled
             $order->status = 'canceled';
             $order->save();
-
+    
+            // Remove all products in the order (optional, depending on logic)
+            OrderProduct::where('order_id', $order->id)->delete();
+    
             // Clear the cart
             session()->forget('cart');
-
-            return redirect()->route('shop.cart')->with('success', 'Order discarded, cart cleared.');
+    
+            return redirect()->route('shop.cart')->with('success', 'Order discarded, quantities restored, cart cleared.');
         }
-
+    
         return redirect()->back()->with('error', 'No active order found to discard.');
-    }
+    }  
 
 }

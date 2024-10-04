@@ -30,7 +30,7 @@
             </ul>
 
             <div class="mt-4">
-                <p class="text-lg">Total: <strong>${{ number_format($order->total_amount, 2) }}</strong></p>
+                <p class="text-lg">Total: <strong>${{ number_format($totalAmount, 2) }}</strong></p>
             </div>
 
             <div class="mt-4 flex space-x-4">
