@@ -37,6 +37,9 @@ Route::middleware('auth')->group(function () {
     Route::put('/products/{product}', [ProductController::class, 'update'])->name('products.update');
     Route::delete('/products/{product}', [ProductController::class, 'destroy'])->name('products.destroy');
 
+    Route::get('/orders', [ProductController::class, 'showOrders'])->name('admin.orders');
+    Route::post('/orders/{orderId}/update', [ProductController::class, 'updateOrderStatus'])->name('admin.orders.update');
+
     Route::prefix('shop')->group(function () {
         Route::get('/cart', [CartController::class, 'viewCart'])->name('shop.cart'); 
         Route::post('/cart/add/{productId}', [CartController::class, 'addToCart'])->name('shop.cart.add'); 
@@ -45,6 +48,7 @@ Route::middleware('auth')->group(function () {
         Route::post('/checkout', [CartController::class, 'checkoutPage'])->name('cart.checkout'); 
         Route::post('/checkout/payment/confirm', [CartController::class, 'confirmPayment'])->name('cart.confirmPayment');
         Route::post('/checkout/payment/discard', [CartController::class, 'discardOrder'])->name('cart.discardOrder');
+        Route::get('/orders',[CartController::class, 'myOrders'])->name('shop.orders');
     });
 
 });

@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Models\Order;
 use App\Models\Product;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
 
@@ -123,4 +124,27 @@ class ProductController extends Controller
 
         return redirect()->route('products.menu')->with('success', 'Product added successfully!');
     }
+
+    // Show all orders to admin
+    public function showOrders()
+    {
+        $orders = Order::with('products', 'user')->orderBy('created_at', 'desc')->get();
+
+        return view('orders', compact('orders'));
+    }
+
+    // Update order status
+    public function updateOrderStatus(Request $request, $orderId)
+    {
+        $order = Order::findOrFail($orderId);
+
+        $request->validate([
+            'status' => 'required|in:pending,canceled,pending_shipment,shipped,delivered'
+        ]);
+
+        $order->status = $request->status;
+        $order->save();
+
+        return redirect()->back()->with('success', 'Order status updated successfully!');
+    }    
 }

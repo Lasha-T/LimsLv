@@ -177,22 +177,23 @@ class CartController extends Controller
     public function confirmPayment(Request $request)
     {
         $order = Order::where('user_id', Auth::id())
-                      ->where('status', 'pending')
-                      ->first();
+                        ->where('status', 'pending')
+                        ->first();
     
         if ($order) {
-            // Mark the order as completed
-            $order->status = 'completed';
+            // Mark the order as pending shipment
+            $order->status = 'pending_shipment';
             $order->save();
     
             // Clear the cart (optional)
             session()->forget('cart');
     
-            return redirect()->route('shop.home')->with('success', 'Payment confirmed, order completed!');
+            return redirect()->route('shop.home')->with('success', 'Payment confirmed, order is now pending shipment!');
         }
     
         return redirect()->back()->with('error', 'No active order found.');
     }
+    
     
 
     // Discard the order and clear the cart
@@ -225,5 +226,11 @@ class CartController extends Controller
     
         return redirect()->back()->with('error', 'No active order found to discard.');
     }  
+
+    public function myOrders()
+    {
+        $orders = Order::where('user_id', Auth::id())->get();
+        return view('shop.myOrders', compact('orders'));
+    }
 
 }

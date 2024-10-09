@@ -13,6 +13,7 @@
             <a href="{{ route('shop.home') }}" class="hover:text-gray-300">Home</a>
             <a href="{{ route('shop.products') }}" class="hover:text-gray-300">Products</a>
             <a href="{{ route('shop.cart') }}" class="hover:text-gray-300">Cart</a>
+            <a href="{{ route('shop.orders') }}" class="hover:text-gray-300">Orders</a>
         </div>
         @if (Route::has('login'))
             <div class="flex justify-end space-x-3">

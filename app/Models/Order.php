@@ -10,8 +10,16 @@ class Order extends Model
     protected $fillable = [
         'user_id', 
         'status', 
-        'total_amount'
+        'total_amount',
+        'shipping_status'
     ];
+
+    const STATUS_PENDING = 'pending';
+    const STATUS_CANCELED = 'canceled';
+
+    const SHIPPING_STATUS_PENDING = 'pending_shipment';
+    const SHIPPING_STATUS_SHIPPED = 'shipped';
+    const SHIPPING_STATUS_DELIVERED = 'delivered';
 
     // Relationship to User (One-to-Many)
     public function user()
