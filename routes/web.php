@@ -39,6 +39,8 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/orders', [ProductController::class, 'showOrders'])->name('admin.orders');
     Route::post('/orders/{orderId}/update', [ProductController::class, 'updateOrderStatus'])->name('admin.orders.update');
+    Route::get('/orders/{order}', [ProductController::class, 'showOrderDetails'])->name('admin.orders.show');
+
 
     Route::prefix('shop')->group(function () {
         Route::get('/cart', [CartController::class, 'viewCart'])->name('shop.cart'); 

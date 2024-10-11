@@ -128,10 +128,15 @@ class ProductController extends Controller
     // Show all orders to admin
     public function showOrders()
     {
-        $orders = Order::with('products', 'user')->orderBy('created_at', 'desc')->get();
-
-        return view('orders', compact('orders'));
+        $orders = Order::with(['products' => function ($query) {
+                            $query->withPivot('updated_at'); // Include the 'updated_at' from the pivot table
+                        }, 'user'])
+                       ->orderBy('created_at', 'desc')
+                       ->paginate(10); 
+    
+        return view('orders.index', compact('orders'));
     }
+    
 
     // Update order status
     public function updateOrderStatus(Request $request, $orderId)
@@ -146,5 +151,13 @@ class ProductController extends Controller
         $order->save();
 
         return redirect()->back()->with('success', 'Order status updated successfully!');
-    }    
+    }  
+    
+    public function showOrderDetails(Order $order)
+    {
+        $order->load('products');  // Load the products in the order with pivot data
+
+        return view('orders.details', compact('order'));
+    }
+
 }
