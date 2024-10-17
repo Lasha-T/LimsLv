@@ -124,40 +124,4 @@ class ProductController extends Controller
 
         return redirect()->route('products.menu')->with('success', 'Product added successfully!');
     }
-
-    // Show all orders to admin
-    public function showOrders()
-    {
-        $orders = Order::with(['products' => function ($query) {
-                            $query->withPivot('updated_at'); // Include the 'updated_at' from the pivot table
-                        }, 'user'])
-                       ->orderBy('created_at', 'desc')
-                       ->paginate(10); 
-    
-        return view('orders.index', compact('orders'));
-    }
-    
-
-    // Update order status
-    public function updateOrderStatus(Request $request, $orderId)
-    {
-        $order = Order::findOrFail($orderId);
-
-        $request->validate([
-            'status' => 'required|in:pending,canceled,pending_shipment,shipped,delivered'
-        ]);
-
-        $order->status = $request->status;
-        $order->save();
-
-        return redirect()->back()->with('success', 'Order status updated successfully!');
-    }  
-    
-    public function showOrderDetails(Order $order)
-    {
-        $order->load('products');  // Load the products in the order with pivot data
-
-        return view('orders.details', compact('order'));
-    }
-
 }

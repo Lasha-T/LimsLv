@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ShopController;
@@ -37,9 +38,11 @@ Route::middleware('auth')->group(function () {
     Route::put('/products/{product}', [ProductController::class, 'update'])->name('products.update');
     Route::delete('/products/{product}', [ProductController::class, 'destroy'])->name('products.destroy');
 
-    Route::get('/orders', [ProductController::class, 'showOrders'])->name('admin.orders');
-    Route::post('/orders/{orderId}/update', [ProductController::class, 'updateOrderStatus'])->name('admin.orders.update');
-    Route::get('/orders/{order}', [ProductController::class, 'showOrderDetails'])->name('admin.orders.show');
+    Route::get('/orders/active', [OrderController::class, 'activeOrders'])->name('orders.active');
+    Route::get('/orders/finished', [OrderController::class, 'finishedOrders'])->name('orders.finished');
+    Route::get('/orders/canceled', [OrderController::class, 'canceledOrders'])->name('orders.canceled');
+    Route::post('/orders/{orderId}/update', [OrderController::class, 'updateOrderStatus'])->name('order.updateStatus');
+    Route::get('/orders/{order}', [OrderController::class, 'showOrderDetails'])->name('orders.showDetails');
 
 
     Route::prefix('shop')->group(function () {

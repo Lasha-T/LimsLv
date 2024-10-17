@@ -21,7 +21,7 @@
                         {{ __('Products') }}
                     </x-nav-link>
                     <!-- Products Link -->
-                    <x-nav-link :href="route('admin.orders')" :active="request()->routeIs('/products/orders')">
+                    <x-nav-link :href="route('orders.active')" :active="request()->routeIs('orders.*')">
                         {{ __('Orders') }}
                     </x-nav-link>
                 </div>

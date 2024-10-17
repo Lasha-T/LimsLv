@@ -6,19 +6,14 @@
                 <a href="{{ route('orders.active') }}">
                     {{ __('Active') }}
                 </a>
-            </h2>
+            </h2> 
             <h2 class="pr-7 font-semibold text-xl  text-gray-400 dark:text-gray-500 hover:text-gray-500 dark:hover:text-gray-400 focus:text-gray-500 dark:focus:text-gray-400 leading-tight">
                 <a href="{{ route('orders.finished') }}">
                     {{ __('Finished') }}
                 </a>
-            </h2> 
-            <h2 class="pr-7 font-semibold text-xl  text-gray-400 dark:text-gray-500 hover:text-gray-500 dark:hover:text-gray-400 focus:text-gray-500 dark:focus:text-gray-400 leading-tight">
-                <a href="{{ route('orders.canceled') }}">
-                    {{ __('Canceled') }}
-                </a>
-            </h2>     
+            </h2>                   
             <h2 class="pr-7 font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-                    {{ __('Order Details') }}
+                    {{ __('Canceled') }}
             </h2> 
         </div>
     </x-slot>
@@ -26,78 +21,75 @@
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <!-- Success Message -->
-            @include('products.partials.success-message')
-            
+            @include('products.partials.success-message') 
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 bg-white dark:bg-gray-800">
-                    
+
                     <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
-                        {{ __('Order ID: ') }} {{ $order->id }}
-                    </h2>                   
+                        {{ __('Canceled Orders') }}
+                    </h2>
 
-                    <div class="mt-4">
-                        <p class="text-sm text-gray-900 dark:text-gray-100">
-                            <strong>{{ __('Status: ') }}</strong>{{ ucfirst($order->status) }}
-                        </p>
-                        <p class="text-sm text-gray-600 dark:text-gray-400">
-                            <strong>{{ __('Created At: ') }}</strong>{{ $order->created_at->format('M d, Y H:i') }}
-                        </p>
-                        <p class="text-sm text-gray-600 dark:text-gray-400">
-                            <strong>{{ __('Order Update: ') }}</strong>
-                                @if ($order->products->isNotEmpty())
-                                    {{ $order->products->last()->pivot->updated_at->format('M d, Y H:i') }}
-                                @else
-                                    {{ __('No Updates') }}
-                                @endif
-                        </p>
-                    </div>
+                    <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
+                        {{ __('Discarded Orders before payment') }}
+                    </p>                     
 
-                    <table class="mt-6 min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+                    <table class="mt-6 space-y-6 min-w-full divide-y divide-gray-200 dark:divide-gray-700">
                         <thead>
                             <tr>
                                 <th scope="col" class="px-6 py-3 text-left text-sm font-bold text-blue-600 dark:text-blue-400 uppercase tracking-wider">
-                                    Product
+                                    Order ID
+                                </th>
+
+                                <th scope="col" class="px-6 py-3 text-left text-sm font-bold text-blue-600 dark:text-blue-400 uppercase tracking-wider">
+                                    Customer
                                 </th>
                                 <th scope="col" class="px-6 py-3 text-left text-sm font-bold text-blue-600 dark:text-blue-400 uppercase tracking-wider">
-                                    Quantity
+                                    Total Amount
                                 </th>
                                 <th scope="col" class="px-6 py-3 text-left text-sm font-bold text-blue-600 dark:text-blue-400 uppercase tracking-wider">
-                                    Price
+                                    Status
                                 </th>
                                 <th scope="col" class="px-6 py-3 text-left text-sm font-bold text-blue-600 dark:text-blue-400 uppercase tracking-wider">
-                                    Total
+                                    Status Updated
                                 </th>
                             </tr>
                         </thead>
+                        
                         <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
-                            @foreach ($order->products as $product)
+                            @foreach ($orders as $order)
                                 <tr>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-gray-100">
-                                        {{ $product->name }}
+                                        <a href="{{ route('orders.showDetails', ['order' => $order->id]) }}" class="text-blue-600 hover:underline" title="Order Details">
+                                            {{ $order->id }}
+                                        </a>
                                     </td>
+
                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">
-                                        {{ $product->pivot->quantity }}
+                                        {{ $order->user->name }}
                                     </td>
+
                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">
-                                        ${{ number_format($product->price, 2) }}
+                                        ${{ number_format($order->total_amount, 2) }}
                                     </td>
+
                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">
-                                        ${{ number_format($product->price * $product->pivot->quantity, 2) }}
+                                        {{ ucfirst($order->status) }}
+                                    </td>
+
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">
+                                        {{ $order->updated_at->format('M d, Y H:i') }}
                                     </td>
                                 </tr>
                             @endforeach
                         </tbody>
                     </table>
-
-                    <div class="mt-6 px-16 flex justify-end text-lg font-bold text-gray-900 dark:text-gray-100">
-                        <p>{{ __('Total Price: ') }} ${{ number_format($order->products->sum(function ($product) {
-                            return $product->price * $product->pivot->quantity;
-                        }), 2) }}</p>
+                    
+                    <div class="mt-4">
+                        {{ $orders->links() }}
                     </div>
-
                 </div>
             </div>
         </div>
-    </div>
+    </div>  
     <script src="{{ asset('js/ac.js') }}"></script>  
 </x-app-layout>
