@@ -20,9 +20,13 @@
                     <x-nav-link :href="route('products.index')" :active="request()->routeIs('products.*')">
                         {{ __('Products') }}
                     </x-nav-link>
-                    <!-- Products Link -->
+                    <!-- Orders Link -->
                     <x-nav-link :href="route('orders.active')" :active="request()->routeIs('orders.*')">
                         {{ __('Orders') }}
+                    </x-nav-link>
+                    <!-- purchases Link -->
+                    <x-nav-link :href="route('purchases.index')" :active="request()->routeIs('purchases.*')">
+                        {{ __('Purchases') }}
                     </x-nav-link>
                 </div>
             </div>

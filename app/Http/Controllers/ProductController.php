@@ -37,7 +37,6 @@ class ProductController extends Controller
             'description' => 'nullable|string|max:1000',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048', // Max size: 2MB
             'price' => 'required|numeric|min:0',
-            'stock' => 'required|integer|min:0',
         ]);
     
         // Handle the image upload if a new image is uploaded
@@ -64,7 +63,6 @@ class ProductController extends Controller
         $product->name = $request->input('name');
         $product->description = $request->input('description');
         $product->price = $request->input('price');
-        $product->stock = $request->input('stock');
     
         // Save the updated product to the database
         $product->save();
@@ -101,7 +99,6 @@ class ProductController extends Controller
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
             'price' => 'required|numeric',
-            'stock' => 'required|integer',
             'image' => 'nullable|image|mimes:jpeg,png,gif|max:2048',
         ]);
 
@@ -118,7 +115,6 @@ class ProductController extends Controller
             'name' => $request->name,
             'description' => $request->description,
             'price' => $request->price,
-            'stock' => $request->stock,
             'image_path' => $imagePath,
         ]);
 

@@ -1,11 +1,12 @@
 <?php
 
+use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\ShopController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\ShopController;
-use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\PurchasesController;
 
 
 
@@ -43,7 +44,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/orders/canceled', [OrderController::class, 'canceledOrders'])->name('orders.canceled');
     Route::post('/orders/{orderId}/update', [OrderController::class, 'updateOrderStatus'])->name('order.updateStatus');
     Route::get('/orders/{order}', [OrderController::class, 'showOrderDetails'])->name('orders.showDetails');
-
+ 
+    Route::get('/purchases/create', [PurchasesController::class, 'create'])->name('purchases.create');
+    Route::post('/purchases/store', [PurchasesController::class, 'store'])->name('purchases.store');
+    Route::get('/purchases/index', [PurchasesController::class, 'index'])->name('purchases.index');
 
     Route::prefix('shop')->group(function () {
         Route::get('/cart', [CartController::class, 'viewCart'])->name('shop.cart'); 

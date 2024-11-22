@@ -54,12 +54,6 @@
                             <input type="number" name="price" id="price" step="0.01" class="mt-1 block w-full border-gray-300 dark:border-gray-700 rounded-md shadow-sm dark:bg-gray-900 dark:text-white">
                         </div>
 
-                        <!-- Stock Field -->
-                        <div class="mb-4">
-                            <label for="stock" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Stock</label>
-                            <input type="number" name="stock" id="stock" class="mt-1 block w-full border-gray-300 dark:border-gray-700 rounded-md shadow-sm dark:bg-gray-900 dark:text-white">
-                        </div>
-
                         <!-- Submit Button -->
                         <div>
                             <button type="submit" class="inline-flex items-center px-4 py-2 bg-blue-600 dark:bg-blue-500 border border-transparent rounded-md font-semibold text-white hover:bg-blue-700 dark:hover:bg-blue-400">
