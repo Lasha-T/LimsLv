@@ -28,6 +28,10 @@
                     <x-nav-link :href="route('purchases.index')" :active="request()->routeIs('purchases.*')">
                         {{ __('Purchases') }}
                     </x-nav-link>
+                    <!-- Accounting Link -->
+                    <x-nav-link :href="route('accounting.index')" :active="request()->routeIs('accounting.*')">
+                        {{ __('Accounting') }}
+                    </x-nav-link>
                 </div>
             </div>
 

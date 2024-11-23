@@ -7,6 +7,7 @@ use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PurchasesController;
+use App\Http\Controllers\AccountingController;
 
 
 
@@ -48,6 +49,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/purchases/create', [PurchasesController::class, 'create'])->name('purchases.create');
     Route::post('/purchases/store', [PurchasesController::class, 'store'])->name('purchases.store');
     Route::get('/purchases/index', [PurchasesController::class, 'index'])->name('purchases.index');
+
+    Route::get('/accounting', [AccountingController::class, 'index'])->name('accounting.index');
 
     Route::prefix('shop')->group(function () {
         Route::get('/cart', [CartController::class, 'viewCart'])->name('shop.cart'); 

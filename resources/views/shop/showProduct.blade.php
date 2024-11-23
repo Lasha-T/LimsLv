@@ -17,7 +17,7 @@
             <div class="flex justify-end">
                 <form action="{{ route('shop.cart.add', $product->id) }}" method="POST" class="flex justify-end items-center">
                     @csrf
-                    <input type="number" id="numberInput" name="quantity" value="1" min="1" class="w-12 h-8 text-left p-1 border border-green-500 rounded mr-2">                        
+                    <input type="number" id="numberInput" name="quantity" value="0" min="1" class="w-12 h-8 text-left p-1 border border-green-500 rounded mr-2">                        
                     <button type="submit" class="bg-green-500 text-white px-4 py-1 rounded flex items-center">
                         Add to Cart
                         <svg xmlns="http://www.w3.org/2000/svg" fill="white" viewBox="0 0 24 24" stroke-width="1.5" stroke="white" class="w-5 h-5 ml-2">

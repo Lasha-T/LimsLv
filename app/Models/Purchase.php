@@ -20,10 +20,10 @@ class Purchase extends Model
     protected $casts = [
         'purchase_date' => 'datetime',
     ];
-    
+
 
     public function product()
     {
         return $this->belongsTo(Product::class);
-    }    
+    }   
 }

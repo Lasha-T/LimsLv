@@ -110,6 +110,12 @@
                     <div class="mt-4">
                         {{ $orders->links() }}
                     </div>
+
+                    @if ($orders->isEmpty())
+                        <p class="mt-6 text-gray-500 dark:text-gray-400">
+                            {{ __('No orders found.') }}
+                        </p>
+                    @endif
                 </div>
             </div>
         </div>

@@ -98,7 +98,13 @@
                     <!-- Pagination Links -->
                     <div class="mt-4">
                         {{ $products->links() }}
-                    </div>                    
+                    </div> 
+                    
+                    @if ($products->isEmpty())
+                        <p class="mt-6 text-gray-500 dark:text-gray-400">
+                            {{ __('No products found.') }}
+                        </p>
+                    @endif
                 </div>
             </div>
         </div>
