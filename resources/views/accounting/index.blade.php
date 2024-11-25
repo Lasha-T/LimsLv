@@ -1,8 +1,15 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            {{ __('View') }}
-        </h2>
+        <div class="flex">
+            <h2 class="pr-7 font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
+                {{ __('View All') }}
+            </h2>
+            <h2 class="pr-7 font-semibold text-xl text-gray-400 dark:text-gray-500 hover:text-gray-500 dark:hover:text-gray-400 focus:text-gray-500 dark:focus:text-gray-400 leading-tight">
+                <a href="{{ route('accounting.select-product') }}">
+                    {{ __('By Product') }} 
+                </a>
+            </h2>
+        </div>
     </x-slot>
 
     <div class="py-12">

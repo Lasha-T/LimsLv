@@ -51,6 +51,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/purchases/index', [PurchasesController::class, 'index'])->name('purchases.index');
 
     Route::get('/accounting', [AccountingController::class, 'index'])->name('accounting.index');
+    Route::get('/accounting/select-product', [AccountingController::class, 'selectProduct'])->name('accounting.select-product');
+    Route::get('/accounting/by-product', [AccountingController::class, 'byProductView'])->name('accounting.by-product');
+    
 
     Route::prefix('shop')->group(function () {
         Route::get('/cart', [CartController::class, 'viewCart'])->name('shop.cart'); 
