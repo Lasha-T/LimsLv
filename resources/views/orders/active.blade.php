@@ -89,17 +89,20 @@
                                             <select name="status" 
                                                 class="bg-gray-800 text-white border border-gray-600 p-1 rounded-lg focus:outline-none focus:ring focus:ring-blue-500 text-sm pr-8 status-select"
                                                 data-current-status="{{ $order->status }}" 
-                                                onchange="showUpdateButton(this)">
+                                                onchange="showUpdateButton(this)"
+                                                {{ auth()->user()->role !== 'admin' ? 'disabled' : '' }}> <!-- Conditionally disable for non-admins -->
                                                 <option value="pending_shipment" {{ $order->status == 'pending_shipment' ? 'selected' : '' }}>Pending Sh.</option>
                                                 <option value="shipped" {{ $order->status == 'shipped' ? 'selected' : '' }}>Shipped</option>
                                                 <option value="delivered" {{ $order->status == 'delivered' ? 'selected' : '' }}>Delivered</option>
                                             </select>
                                             
-                                            <button type="submit" 
-                                                class="text-gray-500 dark:text-gray-400 border border-gray-500 dark:border-gray-400 rounded-full px-3 py-1 hover:bg-blue-600 hover:text-white hover:border-blue-600 transition duration-200 ml-2 update-btn"
-                                                style="display: none;">
-                                                Update
-                                            </button>
+                                            @if(auth()->user()->role === 'admin') <!-- Only show the button for admins -->
+                                                <button type="submit" 
+                                                    class="text-gray-500 dark:text-gray-400 border border-gray-500 dark:border-gray-400 rounded-full px-3 py-1 hover:bg-blue-600 hover:text-white hover:border-blue-600 transition duration-200 ml-2 update-btn"
+                                                    style="display: none;">
+                                                    Update
+                                                </button>
+                                            @endif
                                         </form>
                                     </td>
                                 </tr>

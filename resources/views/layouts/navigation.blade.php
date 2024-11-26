@@ -12,26 +12,37 @@
 
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+
                     <!-- Dashboard Link -->
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                         {{ __('Dashboard') }} 
                     </x-nav-link>
+
                     <!-- Products Link -->
+                    @if((auth()->user()->role === 'admin') || (auth()->user()->role === 'adminguest'))
                     <x-nav-link :href="route('products.index')" :active="request()->routeIs('products.*')">
                         {{ __('Products') }}
                     </x-nav-link>
+                    @endif
+
                     <!-- Orders Link -->
                     <x-nav-link :href="route('orders.active')" :active="request()->routeIs('orders.*')">
                         {{ __('Orders') }}
                     </x-nav-link>
+
                     <!-- purchases Link -->
+                    @if((auth()->user()->role === 'admin') || (auth()->user()->role === 'adminguest'))
                     <x-nav-link :href="route('purchases.index')" :active="request()->routeIs('purchases.*')">
                         {{ __('Purchases') }}
                     </x-nav-link>
+                    @endif
+
                     <!-- Accounting Link -->
+                    @if((auth()->user()->role === 'admin') || (auth()->user()->role === 'adminguest'))
                     <x-nav-link :href="route('accounting.index')" :active="request()->routeIs('accounting.*')">
                         {{ __('Accounting') }}
                     </x-nav-link>
+                    @endif
                 </div>
             </div>
 
